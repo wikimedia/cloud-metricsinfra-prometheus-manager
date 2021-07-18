@@ -1,3 +1,3 @@
-from prometheus_flask_exporter import PrometheusMetrics
+from prometheus_flask_exporter.multiprocess import UWsgiPrometheusMetrics
 
-metrics = PrometheusMetrics.for_app_factory()
+metrics = UWsgiPrometheusMetrics.for_app_factory()
