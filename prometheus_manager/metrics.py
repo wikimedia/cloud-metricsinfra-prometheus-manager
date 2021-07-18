@@ -1,3 +1,9 @@
+import os
+
+from prometheus_flask_exporter import PrometheusMetrics
 from prometheus_flask_exporter.multiprocess import UWsgiPrometheusMetrics
 
-metrics = UWsgiPrometheusMetrics.for_app_factory()
+if 'PROMETHEUS_MULTIPROC_DIR' in os.environ:
+    metrics = UWsgiPrometheusMetrics.for_app_factory()
+else:
+    metrics = PrometheusMetrics.for_app_factory(path=None)

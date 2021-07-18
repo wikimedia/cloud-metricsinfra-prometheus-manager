@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+"""
+Open an interactive shell with app context ready.
+"""
+import code
+
+from prometheus_manager.app import create_app
+
+app = create_app('ADMIN')
+
+with app.app_context():
+    code.interact(banner="--- prometheus-manager interactive shell ---", local={
+        "app": app
+    })

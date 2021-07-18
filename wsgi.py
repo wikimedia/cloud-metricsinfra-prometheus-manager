@@ -1,3 +1,3 @@
-from prometheus_manager import create_app
+from prometheus_manager.app import create_app
 
 app = create_app()

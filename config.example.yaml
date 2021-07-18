@@ -1,0 +1,9 @@
+DATABASE:
+  HOST: localhost
+  DATABASE: prometheusconfig
+  USER:
+    USERNAME: prometheusconfig
+    PASSWORD: prometheusconfig
+  ADMIN:
+    USERNAME: prometheusconfigadmin
+    PASSWORD: prometheusconfigadmin
