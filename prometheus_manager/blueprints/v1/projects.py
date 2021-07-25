@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify
+from sqlalchemy.orm import joinedload
 
 from prometheus_manager.models import Project
 
@@ -17,4 +18,34 @@ def projects_index():
             }
             for project in all_projects
         ]
+    )
+
+
+@projects.get('/<project_id>')
+def project_by_id(project_id: int):
+    project = (
+        Project.query.filter_by(id=project_id)
+        .options(joinedload('scrapes'), joinedload('scrapes', 'openstack_discovery'))
+        .first()
+    )
+
+    return jsonify(
+        {
+            'id': project.id,
+            'openstack_id': project.openstack_id,
+            'name': project.name,
+            'scrapes': [
+                {
+                    'id': scrape.id,
+                    'name': scrape.name,
+                    'openstack_discovery': {
+                        'name_regex': scrape.openstack_discovery.name_regex,
+                        'port': scrape.openstack_discovery.port,
+                    }
+                    if scrape.openstack_discovery
+                    else None,
+                }
+                for scrape in project.scrapes
+            ],
+        }
     )
