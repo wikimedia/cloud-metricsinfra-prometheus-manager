@@ -3,7 +3,7 @@ from sqlalchemy.orm import joinedload
 
 from prometheus_manager.models import Project
 
-projects = Blueprint('projectsv1', __name__, url_prefix='/projects/v1')
+projects = Blueprint('v1projects', __name__, url_prefix='/v1/projects')
 
 
 @projects.get('')
@@ -38,6 +38,7 @@ def project_by_id(project_id: int):
                 {
                     'id': scrape.id,
                     'name': scrape.name,
+                    'path': scrape.path,
                     'openstack_discovery': {
                         'name_regex': scrape.openstack_discovery.name_regex,
                         'port': scrape.openstack_discovery.port,

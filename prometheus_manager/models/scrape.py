@@ -10,6 +10,8 @@ class Scrape(database.Model):
     project_id = Column(Integer, ForeignKey('projects.id', ondelete='CASCADE'), nullable=False)
     name = Column(String(255), nullable=False)
 
+    path = Column(String(255), nullable=False, server_default='/metrics')
+
     project = relationship('Project', back_populates='scrapes', uselist=False)
     openstack_discovery = relationship(
         'OpenstackDiscovery', back_populates='scrape', uselist=False
