@@ -11,4 +11,5 @@ class Project(database.Model):
     openstack_id = Column(String(255), nullable=False, unique=True)
     name = Column(String(255), nullable=False, unique=True)
 
+    alerts = relationship('AlertRule', back_populates='project')
     scrapes = relationship('Scrape', back_populates='project')

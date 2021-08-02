@@ -25,7 +25,11 @@ def projects_index():
 def project_by_id(project_id: int):
     project = (
         Project.query.filter_by(id=project_id)
-        .options(joinedload('scrapes'), joinedload('scrapes', 'openstack_discovery'))
+        .options(
+            joinedload('alerts'),
+            joinedload('scrapes'),
+            joinedload('scrapes', 'openstack_discovery'),
+        )
         .first()
     )
 
@@ -34,6 +38,17 @@ def project_by_id(project_id: int):
             'id': project.id,
             'openstack_id': project.openstack_id,
             'name': project.name,
+            'alert_rules': [
+                {
+                    'id': alert.id,
+                    'name': alert.name,
+                    'query': alert.query,
+                    'duration': alert.duration,
+                    'severity': alert.severity,
+                    'annotations': alert.annotations,
+                }
+                for alert in project.alerts
+            ],
             'scrapes': [
                 {
                     'id': scrape.id,

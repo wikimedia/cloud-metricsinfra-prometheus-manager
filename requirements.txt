@@ -5,3 +5,4 @@ prometheus-flask-exporter==0.18.2
 pymysql==1.0.2
 pyyaml==5.4.1
 sqlalchemy==1.4.21
+sqlalchemy-json==0.4.0
