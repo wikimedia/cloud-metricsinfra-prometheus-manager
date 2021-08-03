@@ -3,7 +3,7 @@ import os
 import flask
 import yaml
 
-from prometheus_manager.blueprints.v1.projects import projects
+from prometheus_manager.api.blueprint import api
 from prometheus_manager.config import construct_config
 from prometheus_manager.database import alembic, database
 from prometheus_manager.metrics import metrics
@@ -26,6 +26,6 @@ def create_app(db_account='USER'):
     with app.app_context():
         metrics.register_endpoint('/metrics')
 
-    app.register_blueprint(projects)
+    app.register_blueprint(api)
 
     return app
