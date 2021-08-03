@@ -1,5 +1,4 @@
-from prometheus_manager.models import Project, Scrape
-from prometheus_manager.models.alert import BaseAlertRule
+from prometheus_manager.models import BaseAlertRule, GlobalAlertRule, Project, Scrape
 
 
 def format_project_base(project: Project):
@@ -19,6 +18,14 @@ def format_alert_rule(alert: BaseAlertRule):
         'duration': alert.duration,
         'severity': alert.severity,
         'annotations': alert.annotations,
+    }
+
+
+def format_global_alert_rule(alert: GlobalAlertRule):
+    base = format_alert_rule(alert)
+    return {
+        **base,
+        'mode': alert.mode,
     }
 
 

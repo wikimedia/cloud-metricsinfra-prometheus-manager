@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify
 from sqlalchemy.orm import joinedload
 
 from prometheus_manager.api.formatting import (
-    format_alert_rule,
+    format_global_alert_rule,
     format_project_base,
     format_project_full,
 )
@@ -39,4 +39,4 @@ def project_by_id(project_id: int):
 @api.get('/v1/global-alerts')
 def global_alerts_index():
     all_global_alerts = GlobalAlertRule.query.all()
-    return jsonify([format_alert_rule(alert_rule) for alert_rule in all_global_alerts])
+    return jsonify([format_global_alert_rule(alert_rule) for alert_rule in all_global_alerts])
