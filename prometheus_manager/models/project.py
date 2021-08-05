@@ -13,3 +13,4 @@ class Project(database.Model):
 
     alerts = relationship('AlertRule', back_populates='project')
     scrapes = relationship('Scrape', back_populates='project')
+    contact_groups = relationship('ContactGroup', back_populates='project')

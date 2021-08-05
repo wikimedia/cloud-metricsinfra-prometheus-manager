@@ -1,4 +1,10 @@
-from prometheus_manager.models import BaseAlertRule, GlobalAlertRule, Project, Scrape
+from prometheus_manager.models import (
+    BaseAlertRule,
+    ContactGroup,
+    GlobalAlertRule,
+    Project,
+    Scrape,
+)
 
 
 def format_project_base(project: Project):
@@ -50,3 +56,27 @@ def format_project_full(project: Project):
         'alert_rules': [format_alert_rule(alert) for alert in project.alerts],
         'scrapes': [format_scrape(scrape) for scrape in project.scrapes],
     }
+
+
+def format_contact_group(
+    contact_group: ContactGroup, include_project: bool = False, include_members: bool = False
+) -> dict:
+    data = {
+        'id': contact_group.id,
+        'name': contact_group.name,
+        'project_id': contact_group.project_id,
+    }
+
+    if include_project:
+        data['project'] = format_project_base(contact_group.project)
+    if include_members:
+        data['members'] = [
+            {
+                'id': member.id,
+                'type': member.type,
+                'value': member.value,
+            }
+            for member in contact_group.members
+        ]
+
+    return data

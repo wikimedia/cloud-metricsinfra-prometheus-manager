@@ -2,11 +2,12 @@ from flask import Blueprint, jsonify
 from sqlalchemy.orm import joinedload
 
 from prometheus_manager.api.formatting import (
+    format_contact_group,
     format_global_alert_rule,
     format_project_base,
     format_project_full,
 )
-from prometheus_manager.models import Project
+from prometheus_manager.models import ContactGroup, Project
 from prometheus_manager.models.alert import GlobalAlertRule
 
 api = Blueprint('api', __name__, url_prefix='/')
@@ -40,3 +41,17 @@ def project_by_id(project_id: int):
 def global_alerts_index():
     all_global_alerts = GlobalAlertRule.query.all()
     return jsonify([format_global_alert_rule(alert_rule) for alert_rule in all_global_alerts])
+
+
+@api.get('/v1/contact-groups')
+def contact_groups_index():
+    all_contact_groups = ContactGroup.query.options(
+        joinedload('members'), joinedload('project')
+    ).all()
+
+    return jsonify(
+        [
+            format_contact_group(contact_group, include_project=True, include_members=True)
+            for contact_group in all_contact_groups
+        ]
+    )
