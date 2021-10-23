@@ -28,6 +28,7 @@ def project_by_id(project_id: int):
             joinedload('scrapes'),
             joinedload('scrapes', 'openstack_discovery'),
             joinedload('scrapes', 'static_discovery'),
+            joinedload('default_contact_group'),
         )
         .first()
     )

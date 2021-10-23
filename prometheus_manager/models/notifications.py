@@ -11,7 +11,12 @@ class ContactGroup(database.Model):
     name = Column(String(255), nullable=False)
     project_id = Column(Integer, ForeignKey('projects.id', ondelete='CASCADE'), nullable=False)
 
-    project = relationship('Project', back_populates='contact_groups', uselist=False)
+    project = relationship(
+        'Project',
+        back_populates='contact_groups',
+        foreign_keys='ContactGroup.project_id',
+        uselist=False,
+    )
     members = relationship('ContactGroupMember', back_populates='contact_group')
 
     __table_args__ = (UniqueConstraint('project_id', 'name', name='u_project_name'),)
