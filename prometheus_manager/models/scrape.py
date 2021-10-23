@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, UniqueConstraint
+from sqlalchemy import Column, Enum, ForeignKey, Integer, String, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from prometheus_manager.database import database
@@ -10,6 +10,7 @@ class Scrape(database.Model):
     project_id = Column(Integer, ForeignKey('projects.id', ondelete='CASCADE'), nullable=False)
     name = Column(String(255), nullable=False)
 
+    scheme = Column(Enum('http', 'https'), nullable=False, server_default='http')
     path = Column(String(255), nullable=False, server_default='/metrics')
 
     project = relationship('Project', back_populates='scrapes', uselist=False)

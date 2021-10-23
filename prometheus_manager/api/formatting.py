@@ -39,6 +39,7 @@ def format_scrape(scrape: Scrape):
     return {
         'id': scrape.id,
         'name': scrape.name,
+        'scheme': scrape.scheme,
         'path': scrape.path,
         'openstack_discovery': {
             'name_regex': scrape.openstack_discovery.name_regex,
