@@ -46,6 +46,13 @@ def format_scrape(scrape: Scrape):
         }
         if scrape.openstack_discovery
         else None,
+        'static_discovery': [
+            {
+                'host': target.host,
+                'port': target.port,
+            }
+            for target in scrape.static_discovery
+        ],
     }
 
 

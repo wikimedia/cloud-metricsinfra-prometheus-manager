@@ -16,6 +16,7 @@ class Scrape(database.Model):
     openstack_discovery = relationship(
         'OpenstackDiscovery', back_populates='scrape', uselist=False
     )
+    static_discovery = relationship('StaticDiscovery', back_populates='scrape', uselist=True)
 
     __table_args__ = (UniqueConstraint('project_id', 'name', name='u_project_name'),)
 
@@ -28,3 +29,14 @@ class OpenstackDiscovery(database.Model):
     name_regex = Column(String(1023), nullable=True)
 
     scrape = relationship('Scrape', back_populates='openstack_discovery', uselist=False)
+
+
+class StaticDiscovery(database.Model):
+    __tablename__ = 'scrape_discovery_static'
+    id = Column(Integer, primary_key=True)
+    scrape_id = Column(Integer, ForeignKey('scrapes.id', ondelete='CASCADE'), unique=False)
+
+    host = Column(String(1023), nullable=False)
+    port = Column(Integer, nullable=False)
+
+    scrape = relationship('Scrape', back_populates='static_discovery', uselist=False)

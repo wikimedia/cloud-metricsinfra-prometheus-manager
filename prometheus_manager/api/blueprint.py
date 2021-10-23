@@ -27,6 +27,7 @@ def project_by_id(project_id: int):
             joinedload('alerts'),
             joinedload('scrapes'),
             joinedload('scrapes', 'openstack_discovery'),
+            joinedload('scrapes', 'static_discovery'),
         )
         .first()
     )
