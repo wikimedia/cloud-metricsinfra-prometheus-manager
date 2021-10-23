@@ -61,7 +61,9 @@ def format_project_full(project: Project):
     base = format_project_base(project)
     return {
         **base,
-        'default_contact_group': format_contact_group(project.default_contact_group)
+        'default_contact_group': format_contact_group(
+            project.default_contact_group, include_project=True
+        )
         if project.default_contact_group
         else None,
         'alert_rules': [format_alert_rule(alert) for alert in project.alerts],
