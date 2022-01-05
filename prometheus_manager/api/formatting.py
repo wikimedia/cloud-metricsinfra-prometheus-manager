@@ -61,6 +61,7 @@ def format_project_full(project: Project):
     base = format_project_base(project)
     return {
         **base,
+        'acl_group': project.acl_group,
         'default_contact_group': format_contact_group(
             project.default_contact_group, include_project=True
         )

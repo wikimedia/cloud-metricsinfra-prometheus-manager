@@ -15,6 +15,8 @@ class Project(database.Model):
         Integer, ForeignKey('contact_groups.id', ondelete='SET NULL'), nullable=True
     )
 
+    acl_group = Column(String(255), nullable=True)
+
     alerts = relationship('AlertRule', back_populates='project')
     scrapes = relationship('Scrape', back_populates='project')
     contact_groups = relationship(
