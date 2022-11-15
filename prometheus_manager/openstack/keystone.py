@@ -4,7 +4,7 @@ from keystoneauth1.identity import v3
 from keystoneclient.v3 import client
 
 
-def session(file_path: str):
+def session(file_path: str) -> keystone_session.Session:
     with open(file_path, 'r') as f:
         account_data = yaml.safe_load(f.read())
 
@@ -23,7 +23,7 @@ def session(file_path: str):
     )
 
 
-def keystone_client(file_path: str):
+def keystone_client(file_path: str) -> client.Client:
     return client.Client(
         session=session(file_path),
         interface='public',
