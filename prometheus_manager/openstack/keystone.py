@@ -6,7 +6,7 @@ from keystoneclient.v3 import client
 
 def session(file_path: str) -> keystone_session.Session:
     with open(file_path, 'r') as f:
-        account_data = yaml.safe_load(f.read())
+        account_data = yaml.safe_load(f)
 
     auth = v3.Password(
         auth_url=account_data['OS_AUTH_URL'],
