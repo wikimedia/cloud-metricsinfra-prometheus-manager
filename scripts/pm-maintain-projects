@@ -40,7 +40,7 @@ def main():
                 name=project
             )
             if not args.dry_run:
-                database.add(project_obj)
+                database.session.add(project_obj)
 
             print(f"added new project {project}")
 
@@ -49,12 +49,12 @@ def main():
                 continue
 
             if not args.dry_run:
-                database.delete(project_obj)
+                database.session.delete(project_obj)
 
             print(f"deleted non-existent project {project}")
 
         if not args.dry_run:
-            database.commit()
+            database.session.commit()
 
 
 if __name__ == '__main__':
