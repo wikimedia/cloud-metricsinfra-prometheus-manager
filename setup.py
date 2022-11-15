@@ -13,6 +13,7 @@ setup(
     ],
     scripts=[
         'scripts/pm-interactive',
+        'scripts/pm-maintain-projects',
         'scripts/pm-migrate',
     ],
 )

@@ -7,3 +7,6 @@ DATABASE:
   ADMIN:
     USERNAME: prometheusconfigadmin
     PASSWORD: prometheusconfigadmin
+
+OPENSTACK:
+  CONFIG: /etc/novaobserver.yaml

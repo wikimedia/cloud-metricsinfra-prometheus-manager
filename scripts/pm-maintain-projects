@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+"""
+Synchronizes the project data with OpenStack.
+"""
+from argparse import ArgumentParser
+
+from prometheus_manager.app import create_app
+from prometheus_manager.database import database
+from prometheus_manager.models import Project
+from prometheus_manager.openstack import keystone
+
+
+def main():
+    parser = ArgumentParser(description=__doc__)
+    parser.add_argument("--dry-run", action="store_true")
+    args = parser.parse_args()
+
+    if args.dry_run:
+        print("Running in DRY mode, not actually changing anything")
+
+    app = create_app()
+
+    with app.app_context():
+        keystone_config_file = app.config["OPENSTACK"]["CONFIG"]
+        keystone_client = keystone.keystone_client(keystone_config_file)
+
+        all_projects = keystone.all_projects(keystone_client)
+
+        existing_projects = {
+            project.name: project
+            for project in Project.query.all()
+        }
+
+        for project in all_projects:
+            if project in existing_projects:
+                continue
+
+            project_obj = Project(
+                openstack_id=project,
+                name=project
+            )
+            if not args.dry_run:
+                database.add(project_obj)
+
+            print(f"added new project {project}")
+
+        for project_name, project_obj in existing_projects.items():
+            if project_name in all_projects:
+                continue
+
+            if not args.dry_run:
+                database.delete(project_obj)
+
+            print(f"deleted non-existent project {project}")
+
+        if not args.dry_run:
+            database.commit()
+
+
+if __name__ == '__main__':
+    main()
