@@ -57,7 +57,7 @@ def main():
             if not args.dry_run:
                 database.session.delete(project_obj)
 
-            print(f"deleted non-existent project {project}")
+            print(f"deleted non-existent project {project_name}")
 
         if not args.dry_run:
             database.session.commit()
