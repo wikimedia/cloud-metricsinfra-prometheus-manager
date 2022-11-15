@@ -24,7 +24,13 @@ def main():
         keystone_config_file = app.config["OPENSTACK"]["CONFIG"]
         keystone_client = keystone.keystone_client(keystone_config_file)
 
-        all_projects = keystone.all_projects(keystone_client)
+        excluded_projects = app.config["OPENSTACK"].get("SYNC_EXCLUDE", [])
+
+        all_projects = [
+            project
+            for project in keystone.all_projects(keystone_client)
+            if project not in excluded_projects
+        ]
 
         existing_projects = {
             project.name: project
