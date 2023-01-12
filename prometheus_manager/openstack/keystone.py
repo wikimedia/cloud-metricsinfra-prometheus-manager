@@ -31,6 +31,6 @@ def keystone_client(file_path: str) -> client.Client:
     )
 
 
-def all_projects(keystone: client.Client):
+def all_projects(keystone: client.Client, domain_id: str):
     '''Get a list of all project names.'''
-    return [p.name for p in keystone.projects.list(enabled=True)]
+    return [p.name for p in keystone.projects.list(enabled=True, domain=domain_id)]
