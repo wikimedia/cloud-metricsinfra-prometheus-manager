@@ -1,0 +1,15 @@
+# Development environment only, to work with config.example.yaml
+version: '3.1'
+
+services:
+
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_USER: prometheusconfigadmin
+      MARIADB_PASSWORD: prometheusconfigadmin
+      MARIADB_DATABASE: prometheusconfig
+    ports:
+      - 3306:3306
