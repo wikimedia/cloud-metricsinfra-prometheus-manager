@@ -34,7 +34,9 @@ class GlobalAlertRule(BaseAlertRule, database.Model):
     __tablename__ = 'global_alerts'
 
     mode = Column(
-        Enum(*GLOBAL_ALERT_MODES), nullable=False, server_default=GLOBAL_ALERT_MODE_PER_PROJECT
+        Enum(*GLOBAL_ALERT_MODES),
+        nullable=False,
+        server_default=GLOBAL_ALERT_MODE_PER_PROJECT,
     )
 
     __table_args__ = (UniqueConstraint('name', name='u_name'),)

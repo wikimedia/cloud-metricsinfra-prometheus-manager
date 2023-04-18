@@ -73,7 +73,9 @@ def format_project_full(project: Project):
 
 
 def format_contact_group(
-    contact_group: ContactGroup, include_project: bool = False, include_members: bool = False
+    contact_group: ContactGroup,
+    include_project: bool = False,
+    include_members: bool = False,
 ) -> dict:
     data = {
         'id': contact_group.id,

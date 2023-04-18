@@ -26,7 +26,10 @@ def upgrade():
         sa.Column('severity', sa.String(length=32), server_default='warn', nullable=False),
         sa.Column('annotations', sa.JSON(), nullable=False),
         sa.Column(
-            'mode', sa.Enum('PER_PROJECT', 'GLOBAL'), server_default='PER_PROJECT', nullable=False
+            'mode',
+            sa.Enum('PER_PROJECT', 'GLOBAL'),
+            server_default='PER_PROJECT',
+            nullable=False,
         ),
         sa.PrimaryKeyConstraint('id'),
         sa.UniqueConstraint('name', name='u_name'),
