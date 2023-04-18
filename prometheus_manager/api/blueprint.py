@@ -10,51 +10,55 @@ from prometheus_manager.api.formatting import (
 from prometheus_manager.models import ContactGroup, Project
 from prometheus_manager.models.alert import GlobalAlertRule
 
-api = Blueprint('api', __name__, url_prefix='/')
+api = Blueprint("api", __name__, url_prefix="/")
 
 
-@api.get('/v1/projects')
+@api.get("/v1/projects")
 def projects_index():
     all_projects = Project.query.all()
     return jsonify([format_project_base(project) for project in all_projects])
 
 
-@api.get('/v1/projects/<project_id>')
+@api.get("/v1/projects/<project_id>")
 def project_by_id(project_id: int):
     project = (
         Project.query.filter_by(id=project_id)
         .options(
-            joinedload('alerts'),
-            joinedload('scrapes'),
-            joinedload('scrapes', 'openstack_discovery'),
-            joinedload('scrapes', 'static_discovery'),
-            joinedload('default_contact_group'),
-            joinedload('default_contact_group', 'project'),
+            joinedload("alerts"),
+            joinedload("scrapes"),
+            joinedload("scrapes", "openstack_discovery"),
+            joinedload("scrapes", "static_discovery"),
+            joinedload("default_contact_group"),
+            joinedload("default_contact_group", "project"),
         )
         .first()
     )
 
     if not project:
-        return jsonify({'error': 'project not found'}), 404
+        return jsonify({"error": "project not found"}), 404
 
     return jsonify(format_project_full(project))
 
 
-@api.get('/v1/global-alerts')
+@api.get("/v1/global-alerts")
 def global_alerts_index():
     all_global_alerts = GlobalAlertRule.query.all()
-    return jsonify([format_global_alert_rule(alert_rule) for alert_rule in all_global_alerts])
+    return jsonify(
+        [format_global_alert_rule(alert_rule) for alert_rule in all_global_alerts]
+    )
 
 
-@api.get('/v1/contact-groups')
+@api.get("/v1/contact-groups")
 def contact_groups_index():
     all_contact_groups = ContactGroup.query.options(
-        joinedload('members'), joinedload('project')
+        joinedload("members"), joinedload("project")
     ).all()
 
     return jsonify(
         [
-            format_contact_group(contact_group, include_project=True, include_members=True)
+            format_contact_group(
+                contact_group, include_project=True, include_members=True
+            )
             for contact_group in all_contact_groups
         ]
     )
