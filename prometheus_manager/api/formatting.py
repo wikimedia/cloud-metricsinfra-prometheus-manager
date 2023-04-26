@@ -12,6 +12,7 @@ def format_project_base(project: Project):
         "id": project.id,
         "openstack_id": project.openstack_id,
         "name": project.name,
+        "extra_labels": project.extra_labels,
     }
 
 
@@ -69,7 +70,6 @@ def format_project_full(project: Project):
         else None,
         "alert_rules": [format_alert_rule(alert) for alert in project.alerts],
         "scrapes": [format_scrape(scrape) for scrape in project.scrapes],
-        "extra_labels": project.extra_labels,
     }
 
 
