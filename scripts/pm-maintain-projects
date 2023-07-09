@@ -62,7 +62,7 @@ def main():
             print(f"deleted non-existent project {project_name}")
 
         for image in supported_images:
-            if image in existing_openstack_images:
+            if image in existing_supported_images:
                 continue
 
             image_obj = OpenstackSupportedImage(

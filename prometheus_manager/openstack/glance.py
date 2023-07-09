@@ -8,7 +8,6 @@ def glance_client(session: keystone_session.Session) -> client.Client:
     return client.Client(
         session=session,
         endpoint="public",
-        timeout=2,
     )
 
 
