@@ -2,4 +2,9 @@
 from prometheus_manager.models.alert import AlertRule, BaseAlertRule, GlobalAlertRule
 from prometheus_manager.models.notifications import ContactGroup, ContactGroupMember
 from prometheus_manager.models.project import Project
-from prometheus_manager.models.scrape import OpenstackDiscovery, Scrape, StaticDiscovery
+from prometheus_manager.models.scrape import (
+    OpenstackDiscovery,
+    OpenstackSupportedImage,
+    Scrape,
+    StaticDiscovery,
+)

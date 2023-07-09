@@ -6,9 +6,9 @@ import code
 
 from prometheus_manager.app import create_app
 
-app = create_app('ADMIN')
+app = create_app("ADMIN")
 
 with app.app_context():
-    code.interact(banner="--- prometheus-manager interactive shell ---", local={
-        "app": app
-    })
+    code.interact(
+        banner="--- prometheus-manager interactive shell ---", local={"app": app}
+    )

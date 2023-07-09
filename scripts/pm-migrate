@@ -4,9 +4,9 @@ Perform database migrations.
 """
 from prometheus_manager.app import create_app
 
-app = create_app('ADMIN')
+app = create_app("ADMIN")
 
 with app.app_context():
     from prometheus_manager.database import alembic
-    alembic.upgrade()
 
+    alembic.upgrade()

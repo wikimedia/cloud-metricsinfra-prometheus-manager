@@ -4,6 +4,12 @@ from sqlalchemy.orm import relationship
 from prometheus_manager.database import database
 
 
+class OpenstackSupportedImage(database.Model):
+    __tablename__ = "openstack_supported_images"
+    id = Column(Integer, primary_key=True)
+    openstack_id = Column(String(36), nullable=False, unique=True)
+
+
 class Scrape(database.Model):
     __tablename__ = "scrapes"
     id = Column(Integer, primary_key=True)

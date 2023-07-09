@@ -4,11 +4,16 @@ from sqlalchemy.orm import joinedload
 from prometheus_manager.api.formatting import (
     format_contact_group,
     format_global_alert_rule,
+    format_image,
     format_project_base,
     format_project_full,
 )
-from prometheus_manager.models import ContactGroup, Project
-from prometheus_manager.models.alert import GlobalAlertRule
+from prometheus_manager.models import (
+    ContactGroup,
+    GlobalAlertRule,
+    OpenstackSupportedImage,
+    Project,
+)
 
 api = Blueprint("api", __name__, url_prefix="/")
 
@@ -62,3 +67,9 @@ def contact_groups_index():
             for contact_group in all_contact_groups
         ]
     )
+
+
+@api.get("/v1/supported-openstack-images")
+def supported_openstack_images():
+    images = OpenstackSupportedImage.query.all()
+    return jsonify([format_image(image) for image in images])

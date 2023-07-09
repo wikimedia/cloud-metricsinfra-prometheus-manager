@@ -2,6 +2,7 @@ from prometheus_manager.models import (
     BaseAlertRule,
     ContactGroup,
     GlobalAlertRule,
+    OpenstackSupportedImage,
     Project,
     Scrape,
 )
@@ -97,3 +98,9 @@ def format_contact_group(
         ]
 
     return data
+
+
+def format_image(image: OpenstackSupportedImage) -> dict:
+    return {
+        "openstack_id": image.openstack_id,
+    }

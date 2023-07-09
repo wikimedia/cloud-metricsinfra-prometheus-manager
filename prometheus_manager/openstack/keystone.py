@@ -23,9 +23,9 @@ def session(file_path: str) -> keystone_session.Session:
     )
 
 
-def keystone_client(file_path: str) -> client.Client:
+def keystone_client(session: keystone_session.Session) -> client.Client:
     return client.Client(
-        session=session(file_path),
+        session=session,
         interface="public",
         timeout=2,
     )
