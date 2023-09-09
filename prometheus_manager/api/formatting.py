@@ -38,17 +38,33 @@ def format_global_alert_rule(alert: GlobalAlertRule):
 
 
 def format_scrape(scrape: Scrape):
+    blackbox = None
+    if scrape.scheme in ("http", "https") and scrape.blackbox_http_config:
+        blackbox = {
+            "type": "http",
+            "host": scrape.blackbox_http_config.host,
+            "method": scrape.blackbox_http_config.method,
+            "headers": scrape.blackbox_http_config.headers,
+            "follow_redirects": scrape.blackbox_http_config.follow_redirects,
+            "valid_status_codes": scrape.blackbox_http_config.valid_status_codes,
+            "require_body_match": scrape.blackbox_http_config.require_body_match,
+            "require_body_not_match": scrape.blackbox_http_config.require_body_not_match,
+        }
+
     return {
         "id": scrape.id,
         "name": scrape.name,
         "scheme": scrape.scheme,
         "path": scrape.path,
-        "openstack_discovery": {
-            "name_regex": scrape.openstack_discovery.name_regex,
-            "port": scrape.openstack_discovery.port,
-        }
-        if scrape.openstack_discovery
-        else None,
+        "blackbox": blackbox,
+        "openstack_discovery": (
+            {
+                "name_regex": scrape.openstack_discovery.name_regex,
+                "port": scrape.openstack_discovery.port,
+            }
+            if scrape.openstack_discovery
+            else None
+        ),
         "static_discovery": [
             {
                 "host": target.host,
@@ -64,11 +80,11 @@ def format_project_full(project: Project):
     return {
         **base,
         "acl_group": project.acl_group,
-        "default_contact_group": format_contact_group(
-            project.default_contact_group, include_project=True
-        )
-        if project.default_contact_group
-        else None,
+        "default_contact_group": (
+            format_contact_group(project.default_contact_group, include_project=True)
+            if project.default_contact_group
+            else None
+        ),
         "alert_rules": [format_alert_rule(alert) for alert in project.alerts],
         "scrapes": [format_scrape(scrape) for scrape in project.scrapes],
     }

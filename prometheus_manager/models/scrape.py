@@ -1,5 +1,14 @@
-from sqlalchemy import Column, Enum, ForeignKey, Integer, String, UniqueConstraint
+from sqlalchemy import (
+    Boolean,
+    Column,
+    Enum,
+    ForeignKey,
+    Integer,
+    String,
+    UniqueConstraint,
+)
 from sqlalchemy.orm import relationship
+from sqlalchemy_json import MutableJson
 
 from prometheus_manager.database import database
 
@@ -22,6 +31,9 @@ class Scrape(database.Model):
     path = Column(String(255), nullable=False, server_default="/metrics")
 
     project = relationship("Project", back_populates="scrapes", uselist=False)
+    blackbox_http_config = relationship(
+        "BlackboxHttpConfig", back_populates="scrape", uselist=False
+    )
     openstack_discovery = relationship(
         "OpenstackDiscovery", back_populates="scrape", uselist=False
     )
@@ -30,6 +42,27 @@ class Scrape(database.Model):
     )
 
     __table_args__ = (UniqueConstraint("project_id", "name", name="u_project_name"),)
+
+
+class BlackboxHttpConfig(database.Model):
+    __tablename__ = "scrape_blackbox_http"
+    id = Column(Integer, primary_key=True)
+    scrape_id = Column(
+        Integer, ForeignKey("scrapes.id", ondelete="CASCADE"), unique=True
+    )
+
+    host = Column(String(255), nullable=True)
+    method = Column(String(255), nullable=False)
+    headers = Column(MutableJson, nullable=True)
+    follow_redirects = Column(Boolean, nullable=False, default=False)
+
+    valid_status_codes = Column(MutableJson, nullable=True)
+    require_body_match = Column(MutableJson, nullable=True)
+    require_body_not_match = Column(MutableJson, nullable=True)
+
+    scrape = relationship(
+        "Scrape", back_populates="blackbox_http_config", uselist=False
+    )
 
 
 class OpenstackDiscovery(database.Model):
