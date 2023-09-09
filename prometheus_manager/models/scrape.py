@@ -8,7 +8,7 @@ from sqlalchemy import (
     UniqueConstraint,
 )
 from sqlalchemy.orm import relationship
-from sqlalchemy_json import MutableJson
+from sqlalchemy_json import NestedMutableJson
 
 from prometheus_manager.database import database
 
@@ -53,12 +53,12 @@ class BlackboxHttpConfig(database.Model):
 
     host = Column(String(255), nullable=True)
     method = Column(String(255), nullable=False)
-    headers = Column(MutableJson, nullable=True)
+    headers = Column(NestedMutableJson, nullable=True)
     follow_redirects = Column(Boolean, nullable=False, default=False)
 
-    valid_status_codes = Column(MutableJson, nullable=True)
-    require_body_match = Column(MutableJson, nullable=True)
-    require_body_not_match = Column(MutableJson, nullable=True)
+    valid_status_codes = Column(NestedMutableJson, nullable=True)
+    require_body_match = Column(NestedMutableJson, nullable=True)
+    require_body_not_match = Column(NestedMutableJson, nullable=True)
 
     scrape = relationship(
         "Scrape", back_populates="blackbox_http_config", uselist=False
