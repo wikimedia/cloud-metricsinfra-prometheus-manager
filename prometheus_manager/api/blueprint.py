@@ -20,7 +20,7 @@ api = Blueprint("api", __name__, url_prefix="/")
 
 @api.get("/v1/projects")
 def projects_index():
-    all_projects = Project.query.all()
+    all_projects = Project.query.order_by("name").all()
     return jsonify([format_project_base(project) for project in all_projects])
 
 
