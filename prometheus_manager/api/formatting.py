@@ -39,7 +39,14 @@ def format_global_alert_rule(alert: GlobalAlertRule):
 
 def format_scrape(scrape: Scrape):
     blackbox = None
-    if scrape.scheme in ("http", "https") and scrape.blackbox_http_config:
+    if scrape.scheme in ("tcp", "udp") and scrape.blackbox_dns_config:
+        blackbox = {
+            "type": "dns",
+            "query_name": scrape.blackbox_dns_config.query_name,
+            "query_type": scrape.blackbox_dns_config.query_type,
+            "require_answer_match": scrape.blackbox_dns_config.require_answer_match,
+        }
+    elif scrape.scheme in ("http", "https") and scrape.blackbox_http_config:
         blackbox = {
             "type": "http",
             "host": scrape.blackbox_http_config.host,

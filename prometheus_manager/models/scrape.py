@@ -27,10 +27,15 @@ class Scrape(database.Model):
     )
     name = Column(String(255), nullable=False)
 
-    scheme = Column(Enum("http", "https"), nullable=False, server_default="http")
+    scheme = Column(
+        Enum("http", "https", "tcp", "udp"), nullable=False, server_default="http"
+    )
     path = Column(String(255), nullable=False, server_default="/metrics")
 
     project = relationship("Project", back_populates="scrapes", uselist=False)
+    blackbox_dns_config = relationship(
+        "BlackboxDnsConfig", back_populates="scrape", uselist=False
+    )
     blackbox_http_config = relationship(
         "BlackboxHttpConfig", back_populates="scrape", uselist=False
     )
@@ -42,6 +47,21 @@ class Scrape(database.Model):
     )
 
     __table_args__ = (UniqueConstraint("project_id", "name", name="u_project_name"),)
+
+
+class BlackboxDnsConfig(database.Model):
+    __tablename__ = "scrape_blackbox_dns"
+    id = Column(Integer, primary_key=True)
+    scrape_id = Column(
+        Integer, ForeignKey("scrapes.id", ondelete="CASCADE"), unique=True
+    )
+
+    query_name = Column(String(255), nullable=False)
+    query_type = Column(String(255), nullable=False)
+
+    require_answer_match = Column(NestedMutableJson, nullable=True)
+
+    scrape = relationship("Scrape", back_populates="blackbox_dns_config", uselist=False)
 
 
 class BlackboxHttpConfig(database.Model):

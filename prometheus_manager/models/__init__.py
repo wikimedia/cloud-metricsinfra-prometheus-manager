@@ -3,6 +3,7 @@ from prometheus_manager.models.alert import AlertRule, BaseAlertRule, GlobalAler
 from prometheus_manager.models.notifications import ContactGroup, ContactGroupMember
 from prometheus_manager.models.project import Project
 from prometheus_manager.models.scrape import (
+    BlackboxDnsConfig,
     BlackboxHttpConfig,
     OpenstackDiscovery,
     OpenstackSupportedImage,
