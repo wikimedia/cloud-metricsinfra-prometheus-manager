@@ -73,7 +73,7 @@ def main():
 
             print(f"added new image {image}")
 
-        for image_name, image_obj in existing_supported_images:
+        for image_name, image_obj in existing_supported_images.items():
             if image_name in supported_images:
                 continue
 
