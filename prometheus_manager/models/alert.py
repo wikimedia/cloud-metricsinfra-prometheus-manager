@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Enum, ForeignKey, Integer, String, UniqueConstraint
+from sqlalchemy import Column, Enum, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from sqlalchemy_json import MutableJson
 
@@ -29,8 +29,6 @@ class AlertRule(BaseAlertRule, database.Model):
 
     project = relationship("Project", back_populates="alerts", uselist=False)
 
-    __table_args__ = (UniqueConstraint("project_id", "name", name="u_project_name"),)
-
 
 class GlobalAlertRule(BaseAlertRule, database.Model):
     __tablename__ = "global_alerts"
@@ -40,5 +38,3 @@ class GlobalAlertRule(BaseAlertRule, database.Model):
         nullable=False,
         server_default=GLOBAL_ALERT_MODE_PER_PROJECT,
     )
-
-    __table_args__ = (UniqueConstraint("name", name="u_name"),)
