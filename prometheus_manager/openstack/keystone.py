@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021-2024 Taavi Väänänen <hi@taavi.wtf>
+# SPDX-License-Identifier: AGPL-3.0-only
+
 import yaml
 from keystoneauth1 import session as keystone_session
 from keystoneauth1.identity import v3
