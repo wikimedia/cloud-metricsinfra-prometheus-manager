@@ -34,6 +34,8 @@ def keystone_client(session: keystone_session.Session) -> client.Client:
     )
 
 
-def all_projects(keystone: client.Client, domain_id: str):
-    """Get a list of all project names."""
-    return [p.name for p in keystone.projects.list(enabled=True, domain=domain_id)]
+def all_projects(keystone: client.Client, domain_id: str) -> dict[str, str]:
+    """Get a dict of all project names keyed by the project IDs."""
+    return {
+        p.id: p.name for p in keystone.projects.list(enabled=True, domain=domain_id)
+    }

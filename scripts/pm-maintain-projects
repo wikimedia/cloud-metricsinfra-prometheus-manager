@@ -30,13 +30,13 @@ def main():
         excluded_projects = app.config["OPENSTACK"].get("SYNC_EXCLUDE", [])
         domain_id = app.config["OPENSTACK"].get("DOMAIN_ID", "default")
 
-        all_projects = [
-            project
-            for project in keystone.all_projects(keystone_client, domain_id=domain_id)
-            if project not in excluded_projects
-        ]
+        all_projects = {
+            project_id: project_name
+            for project_id, project_name in keystone.all_projects(keystone_client, domain_id=domain_id).items()
+            if project_id not in excluded_projects and project_name not in excluded_projects
+        }
 
-        existing_projects = {project.name: project for project in Project.query.all()}
+        existing_projects = {project.openstack_id: project for project in Project.query.all()}
 
         supported_images = glance.supported_images(glance_client, tag="wmcs-puppetized")
 
@@ -44,18 +44,24 @@ def main():
             image.openstack_id: image for image in OpenstackSupportedImage.query.all()
         }
 
-        for project in all_projects:
-            if project in existing_projects:
+        for project_id, project_name in all_projects.items():
+            if project_id in existing_projects:
+                project_obj = existing_projects[project_id]
+                if project_obj.name != project_name:
+                    print(f"updating name of project {project_id} (now {project_obj.name}) to {project_name}")
+                    if not args.dry_run:
+                        project_obj.name = project_name
+
                 continue
 
-            project_obj = Project(openstack_id=project, name=project)
+            project_obj = Project(openstack_id=project_id, name=project_name)
             if not args.dry_run:
                 database.session.add(project_obj)
 
-            print(f"added new project {project}")
+            print(f"added new project {project_id} ({project_name})")
 
-        for project_name, project_obj in existing_projects.items():
-            if project_name in all_projects:
+        for projectid, project_obj in existing_projects.items():
+            if project_id in all_projects:
                 continue
 
             if not args.dry_run:
