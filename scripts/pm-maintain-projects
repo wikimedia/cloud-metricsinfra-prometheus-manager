@@ -60,7 +60,7 @@ def main():
 
             print(f"added new project {project_id} ({project_name})")
 
-        for projectid, project_obj in existing_projects.items():
+        for project_id, project_obj in existing_projects.items():
             if project_id in all_projects:
                 continue
 
