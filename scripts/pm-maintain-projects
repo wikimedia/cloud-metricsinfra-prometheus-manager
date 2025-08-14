@@ -44,6 +44,15 @@ def main():
             image.openstack_id: image for image in OpenstackSupportedImage.query.all()
         }
 
+        for project_id, project_obj in existing_projects.items():
+            if project_id in all_projects:
+                continue
+
+            if not args.dry_run:
+                database.session.delete(project_obj)
+
+            print(f"deleted non-existent project {project_name}")
+
         for project_id, project_name in all_projects.items():
             if project_id in existing_projects:
                 project_obj = existing_projects[project_id]
@@ -60,14 +69,14 @@ def main():
 
             print(f"added new project {project_id} ({project_name})")
 
-        for project_id, project_obj in existing_projects.items():
-            if project_id in all_projects:
+        for image_name, image_obj in existing_supported_images.items():
+            if image_name in supported_images:
                 continue
 
             if not args.dry_run:
-                database.session.delete(project_obj)
+                database.session.delete(image_obj)
 
-            print(f"deleted non-existent project {project_name}")
+            print(f"deleted non-existent image {image_name}")
 
         for image in supported_images:
             if image in existing_supported_images:
@@ -80,15 +89,6 @@ def main():
                 database.session.add(image_obj)
 
             print(f"added new image {image}")
-
-        for image_name, image_obj in existing_supported_images.items():
-            if image_name in supported_images:
-                continue
-
-            if not args.dry_run:
-                database.session.delete(image_obj)
-
-            print(f"deleted non-existent image {image_name}")
 
         if not args.dry_run:
             database.session.commit()
