@@ -51,7 +51,7 @@ def main():
             if not args.dry_run:
                 database.session.delete(project_obj)
 
-            print(f"deleted non-existent project {project_name}")
+            print(f"deleted non-existent project {project_id} ({project_obj.name})")
 
         for project_id, project_name in all_projects.items():
             if project_id in existing_projects:
